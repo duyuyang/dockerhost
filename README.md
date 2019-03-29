@@ -16,3 +16,5 @@ sudo apt-get install -y docker-ce
 sudo systemctl status docker
 
 sudo usermod -aG docker ${USER}
+
+## Run applications in docker-compose
