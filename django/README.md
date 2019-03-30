@@ -20,5 +20,9 @@ DATABASES = {
 Run it
 
 ```bash
-docker-compose up
+docker-compose up --scale web=2
 ```
+
+scale
+
+docker-compose scale web=2
