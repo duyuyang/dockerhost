@@ -75,6 +75,9 @@ EOF
     proxy_cache container;
     proxy_cache_valid 200 302 3d;
     proxy_cache_valid 404 1m;
+    proxy_cache_use_stale  error timeout invalid_header updating http_500 http_502 http_503 http_504;
+    proxy_cache_background_update on;
+    proxy_cache_lock on;
 EOF
   fi
   cat <<EOF
@@ -127,7 +130,7 @@ EOF
 if [ -n "${NGINX_MAX_SIZE-}" ]; then
 cat <<EOF
 
-proxy_cache_path /app/cache levels=1:2 keys_zone=container:10m max_size=${NGINX_MAX_SIZE} inactive=600m;
+proxy_cache_path /app/cache levels=1:2 keys_zone=container:10m max_size=${NGINX_MAX_SIZE} inactive=60m use_temp_path=off;
 proxy_temp_path /app/cache/tmp;
 proxy_cache_revalidate on;
 EOF
