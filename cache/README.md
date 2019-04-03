@@ -3,7 +3,7 @@
 
 docker volume create --name=cache
 
-docker-compose up
+docker-compose up --scale web=2
 
 ## Result
 
