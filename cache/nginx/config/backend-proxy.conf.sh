@@ -52,6 +52,7 @@ location_config() {
     proxy_set_header Host \$http_host;
     proxy_redirect off;
     proxy_pass http://${upstream};
+    proxy_buffering on;
     proxy_buffer_size ${NGINX_PROXY_BUFFERS_SIZE:-16k};
     proxy_buffers ${NGINX_PROXY_BUFFERS_COUNT:-8} ${NGINX_PROXY_BUFFERS_SIZE:-16k};
 EOF
@@ -126,7 +127,7 @@ EOF
 if [ -n "${NGINX_MAX_SIZE-}" ]; then
 cat <<EOF
 
-proxy_cache_path /app/cache keys_zone=container:10m max_size=${NGINX_MAX_SIZE};
+proxy_cache_path /app/cache levels=1:2 keys_zone=container:10m max_size=${NGINX_MAX_SIZE} inactive=600m;
 proxy_temp_path /app/cache/tmp;
 proxy_cache_revalidate on;
 EOF
