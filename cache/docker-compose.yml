@@ -5,19 +5,27 @@ volumes:
     external: true
 
 services:
-  proxy:
+  lb:
     build: ./nginx
     volumes:
       - cache:/app/cache
     ports:
-    - "80:80"
+      - "80:80"
+    links:
+      - web
+    networks:
+      - front-tier
     environment:
-      NGINX_BACKEND_HOST: app
+      NGINX_BACKEND_HOST: web
       NGINX_BACKEND_PORT: 5000
       NGINX_MAX_SIZE: 200m # Enable cache
     depends_on:
-      - app
-  app:
+      - web
+  web:
     build: ./app
-    ports:
-    - "5000:5000"
+    networks: 
+      - front-tier
+
+networks:
+  front-tier:
+    driver: bridge
